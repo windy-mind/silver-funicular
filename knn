@@ -1,0 +1,73 @@
+#coding=utf-8  
+from __future__ import division
+import numpy
+import math
+ 
+ 
+def getfooddata(food_file):
+    fooddata=[]
+    foodlines=open(food_file,'r')
+    for line in foodlines:
+        fooddata.append(list(line.strip('\n').split(',')))
+    for i in range(0,len(fooddata)):
+        for j in range(0,len(fooddata[0])):
+            fooddata[i][j]=float(fooddata[i][j])
+    return fooddata
+def getpacketdata(pack_file):
+    packetdata=[]
+    packetlines=open(pack_file,'r')
+    for line in packetlines:
+        packetdata.append(list(line.strip('\n').split(',')))
+    for i in range(0,len(packetdata)):
+        for j in range(0,len(packetdata[0])):
+            packetdata[i][j]=float(packetdata[i][j])
+    return packetdata
+def getelcdata(elc_file):
+    elcdata=[]
+    elclines=open(elc_file,'r')
+    for line in elclines:
+        elcdata.append(list(line.strip('\n').split(',')))
+    for i in range(0,len(elcdata)):
+        for j in range(0,len(elcdata[0])):
+            elcdata[i][j]=float(elcdata[i][j])
+    return elcdata
+def KNN_arithm(fooddata,packetdata,elcdata,expected_data):
+    distance = []
+    food =[]
+    packet=[]
+    elc=[]
+    food_index=0
+    packet_index=0
+    elc_index=0
+    for i in range(0,len(fooddata)):
+        food.append(math.sqrt((numpy.square(expected_data[0]-fooddata[i][0])+numpy.square(expected_data[1]-fooddata[i][1]))))
+        distance.append(math.sqrt((numpy.square(expected_data[0]-fooddata[i][0])+numpy.square(expected_data[1]-fooddata[i][1]))))
+    for j in range(0,len(packetdata)):
+        packet.append(math.sqrt((numpy.square(expected_data[0]-packetdata[i][0])+numpy.square(expected_data[1]-packetdata[i][1]))))
+        distance.append(math.sqrt((numpy.square(expected_data[0]-packetdata[i][0])+numpy.square(expected_data[1]-packetdata[i][1]))))
+    for n in range(0,len(elcdata)):
+        elc.append(math.sqrt((numpy.square(expected_data[0]-elcdata[i][0])+numpy.square(expected_data[1]-elcdata[i][1]))))
+        distance.append(math.sqrt((numpy.square(expected_data[0]-elcdata[i][0])+numpy.square(expected_data[1]-elcdata[i][1]))))
+    distance.sort(reverse=False)
+    k=int(len(distance)/2)+1
+    distance = distance[0:k-1]
+    for m in distance:
+        if m in food:
+            food_index=food_index+1
+        elif m in packet:
+            packet_index=packet_index+1
+        else:
+            elc_index=elc_index+1
+    final=[food_index,packet_index,elc_index]
+    final_index= final.index(max(final))
+if __name__ =="__main__":
+    expected_data=[10,10]
+    k=8
+    food_file=u"D:20161017(1).txt"
+    pack_file=u"D:20161017(1).txt"
+    elc_file=u"D:20161017(1).txt"
+    fooddata=getfooddata(food_file)
+    packetdata=getpacketdata(pack_file)
+    elcdata=getelcdata(elc_file)
+    print fooddata,packetdata,elcdata
+    KNN_arithm(fooddata, packetdata, elcdata, expected_data)
